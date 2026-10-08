@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A1622">
+<title>NHL 32 Progress Tracker</title>
+<style>
+:root{--bg:#EDF4F8;--cd:#fff;--tx:#14202E;--mu:#566678;--ln:#D5E1EA;--ac:#0B4EA2;--oa:#fff;--up:#12803A;--dn:#C0262D;--hi:#E3EEF8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0A1622;--cd:#112338;--tx:#E6EEF6;--mu:#93A8BC;--ln:#1F3650;--ac:#6FC3FF;--oa:#06111C;--up:#4ADE80;--dn:#FF7B86;--hi:#17304D}}
+:root[data-theme=dark]{--bg:#0A1622;--cd:#112338;--tx:#E6EEF6;--mu:#93A8BC;--ln:#1F3650;--ac:#6FC3FF;--oa:#06111C;--up:#4ADE80;--dn:#FF7B86;--hi:#17304D}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%;font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit;touch-action:manipulation;cursor:pointer}
+a{color:var(--ac)}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:3px double #D7263D}
+.hi{max-width:480px;margin:0 auto;display:flex;align-items:center;gap:8px;padding:8px 14px}
+h1{font-size:19px;margin:0;flex:1;line-height:1.15;letter-spacing:-.01em}
+h1 small{display:block;font:500 12px system-ui;color:var(--mu);letter-spacing:0}
+.ib{width:44px;height:44px;border-radius:50%;border:1px solid var(--ln);background:var(--cd);font-size:20px;line-height:1}
+#v{max-width:480px;margin:0 auto;padding:10px 12px 96px}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;background:var(--cd);border-top:1px solid var(--ln);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{flex:1;min-height:58px;background:none;border:0;color:var(--mu);font:600 12px system-ui;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+nav button span{font-size:20px;line-height:1}
+nav .on{color:var(--ac);box-shadow:inset 0 3px 0 var(--ac)}
+.c{background:var(--cd);border:1px solid var(--ln);border-radius:14px;padding:12px;margin:0 0 10px}
+.c h2{font-size:16px;margin:0 0 8px}
+.sm{font-size:13px;color:var(--mu);margin:0 0 8px}
+.big{font-size:21px;font-weight:800;line-height:1.1}
+.lg{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font:800 11px system-ui;flex:none;border:2px solid rgba(128,128,128,.35)}
+.hero{border-left:6px solid var(--ac)}
+.hh{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.fo{display:grid;place-items:center;width:68px;height:68px;border-radius:50%;border:3px solid;flex:none}
+.fo .lg{width:46px;height:46px;font-size:14px}
+.hn{flex:1;min-width:0}.hn .sm{margin:2px 0 0}
+.rb{background:#D7263D;color:#fff;border-radius:12px;padding:6px 10px;font-weight:800;font-size:24px;line-height:1;text-align:center}
+.rb small{display:block;font-size:11px;font-weight:600;margin-top:2px}
+.g2,.g3{display:grid;gap:8px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}
+.t{background:var(--hi);border-radius:10px;padding:8px 4px;text-align:center}
+.t b{display:block;font-size:17px}.t small{display:block;font-size:12px;color:var(--mu)}
+.ch{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}.ch::-webkit-scrollbar{display:none}
+.ch button{flex:none;min-height:44px;padding:4px 16px;border-radius:22px;border:1px solid var(--ln);background:var(--cd);font-weight:600;line-height:1.2}
+.ch button small{display:block;font-size:11px;font-weight:500;opacity:.8}
+.ch .on,.btn{background:var(--ac);color:var(--oa);border-color:var(--ac)}
+.btn,.btn2{min-height:48px;padding:0 20px;border-radius:12px;border:0;font-weight:700;width:100%;margin-top:8px}
+.btn2{background:var(--hi);color:var(--ac)}
+.hd{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--mu);padding-bottom:6px;border-bottom:2px solid var(--ac)}
+.rw{border-bottom:1px solid var(--ln)}.rw.fv{background:var(--hi)}
+.rw summary{display:flex;align-items:center;gap:8px;min-height:58px;padding:6px 2px;list-style:none;cursor:pointer;color:var(--tx);font-weight:400}
+.rw summary::-webkit-details-marker{display:none}
+.ex{padding:4px 2px 12px}
+.rk{width:26px;text-align:center;font-weight:800;font-size:17px}
+.nm{flex:1;min-width:0}.nm>b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.nm small{display:block;color:var(--mu);font-size:12px}
+.v{min-width:54px;text-align:right;font-weight:800;font-size:16px}
+.ar{min-width:34px;text-align:center}
+.u{color:var(--up)}.d{color:var(--dn)}.z{color:var(--mu)}
+.u,.d,.z{font-size:12px;font-weight:700}
+.i{position:relative;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--ac);background:none;color:var(--ac);font:italic 700 12px/1 Georgia,serif;padding:0;display:inline-grid;place-items:center;vertical-align:middle;margin-left:5px}
+.i::before{content:"";position:absolute;inset:-12px}
+.nw{padding:10px 0;border-top:1px solid var(--ln)}.nw:first-of-type{border-top:0}
+.nw b{display:block;font-size:15px;margin:1px 0 2px}.nw p{margin:0;font-size:13px;color:var(--mu)}
+.tg{font:700 12px system-ui;color:#D7263D}
+.nr{display:flex;align-items:center;gap:10px;margin-bottom:8px}.nr p{margin:0}
+.gt{display:flex;justify-content:space-between;font-size:12px;color:var(--mu);margin-bottom:6px}
+.gm{display:flex;align-items:center;justify-content:space-around;margin:4px 0 10px}
+.tm{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:100px}
+.tm .lg{width:42px;height:42px;font-size:12px}.tm small{font-size:11px;color:var(--mu)}
+.at{color:var(--mu);font-weight:700}
+.pr{display:flex;align-items:center;gap:8px;margin-bottom:6px}.pr>b{width:44px;text-align:center}
+.pb{flex:1;height:10px;display:flex;border-radius:5px;overflow:hidden;background:var(--ln)}.pb i{display:block;height:100%}.pb i+i{border-left:2px solid var(--cd)}
+.fvc{border-color:var(--ac);border-width:2px}
+details>summary{cursor:pointer}
+.gc>details>summary{min-height:44px;display:flex;align-items:center;font-weight:700;color:var(--ac)}
+.why{margin:6px 0 0;padding-left:18px;font-size:13px;color:var(--mu)}
+.lu{border-top:1px solid var(--ln);padding:8px 0;font-size:14px}.lu>div>span{display:inline-block;width:18px;font-weight:800;color:var(--ac)}
+.lh{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.ir{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--ln)}
+.rt{text-align:right}.rt small{display:block;font-size:12px;color:var(--mu);margin-top:2px}
+.st{display:inline-block;padding:2px 9px;border-radius:10px;font:700 12px system-ui;background:var(--ln)}
+.st.DTD{background:#FDE68A;color:#78350F}.st.OUT{background:#FECACA;color:#7F1D1D}.st.IR{background:#991B1B;color:#fff}
+#sh{position:fixed;inset:0;z-index:20;display:flex;align-items:flex-end;justify-content:center}
+#sh[hidden]{display:none}
+.bk{position:absolute;inset:0;background:rgba(0,0,0,.55)}
+#pn{position:relative;width:100%;max-width:480px;background:var(--cd);border-radius:18px 18px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));max-height:85%;overflow:auto;animation:up .18s ease-out}
+#pn h3{margin:0 0 6px;font-size:18px}#pn p{margin:0;font-size:15px}
+@keyframes up{from{transform:translateY(24px);opacity:0}}
+@media(prefers-reduced-motion:reduce){#pn{animation:none}}
+.pk{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.pk button{min-height:70px;display:flex;flex-direction:column;align-items:center;gap:4px;border:1px solid var(--ln);background:var(--bg);border-radius:12px;padding:6px 2px;font-size:11px}
+.pk .sel{outline:2px solid var(--ac)}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+</style></head><body>
+<header><div class=hi><h1>NHL 32 Progress Tracker<small id=sb></small></h1><button class=ib data-pick=1 aria-label="Choose favourite team">&#9733;</button></div></header>
+<main id=v></main>
+<nav><button data-tab=home><span>&#127968;</span>Home</button><button data-tab=ranks><span>&#128202;</span>Rankings</button><button data-tab=games><span>&#127954;</span>Games</button><button data-tab=inj><span>&#129657;</span>Injuries</button></nav>
+<div id=sh hidden><div class=bk data-x=1></div><div id=pn></div></div>
+<script>
+const $=id=>document.getElementById(id);
+const RAW=`ANA|Anaheim:Ducks|#F47A38|2.8|3.2|20|77|Dostal,Husso|Terry,Carlsson,Zegras|LaCombe,Gudas
+BOS|Boston:Bruins|#FFB81C|2.8|3.1|21|79|Swayman,Korpisalo|Pastrnak,Geekie,Lindholm|McAvoy,Lohrei
+BUF|Buffalo:Sabres|#2A5CAA|3.0|3.1|21|78|Luukkonen,Levi|Thompson,Peterka,Norris|Dahlin,Power
+CGY|Calgary:Flames|#D2282E|2.8|2.9|19|81|Wolf,Vladar|Kadri,Coronato,Huberdeau|Hanley,Weegar
+CAR|Carolina:Hurricanes|#CC0000|3.2|2.6|25|83|Andersen,Kochetkov|Aho,Stankoven,Svechnikov|Slavin,Chatfield
+CHI|Chicago:Blackhawks|#CF0A2C|2.6|3.3|18|78|Soderblom,Mrazek|Bedard,Hall,Donato|Levshunov,Rinzel
+COL|Colorado:Avalanche|#8A2D4D|3.4|3.0|24|79|Blackwood,Wedgewood|MacKinnon,Necas,Nelson|Makar,Toews
+CBJ|Columbus:Blue Jackets|#285BA6|3.1|3.2|22|77|Merzlikins,Greaves|Johnson,Fantilli,Marchenko|Werenski,Severson
+DAL|Dallas:Stars|#006847|3.2|2.7|22|82|Oettinger,DeSmith|Robertson,Hintz,Rantanen|Heiskanen,Lindell
+DET|Detroit:Red Wings|#CE1126|3.0|3.1|21|79|Gibson,Talbot|Raymond,Larkin,Kane|Seider,Edvinsson
+EDM|Edmonton:Oilers|#FF4C00|3.2|2.9|26|80|Skinner,Pickard|McDavid,Draisaitl,Hyman|Bouchard,Ekholm
+FLA|Florida:Panthers|#C8102E|3.1|2.7|22|80|Bobrovsky,Tarasov|Barkov,Reinhart,Tkachuk|Ekblad,Forsling
+LAK|Los Angeles:Kings|#A2AAAD|2.8|2.7|19|82|Kuemper,Forsberg|Kopitar,Kempe,Fiala|Doughty,Anderson
+MIN|Minnesota:Wild|#1E6B4E|3.0|2.8|20|81|Gustavsson,Wallstedt|Kaprizov,Boldy,Hartman|Faber,Spurgeon
+MTL|Montreal:Canadiens|#AF1E2D|3.0|3.1|20|79|Montembeault,Dobes|Suzuki,Caufield,Demidov|Hutson,Guhle
+NSH|Nashville:Predators|#FFB81C|2.9|3.1|20|79|Saros,Annunen|Stamkos,O'Reilly,Marchessault|Josi,Carrier
+NJD|New Jersey:Devils|#CE1126|3.0|3.0|21|80|Markstrom,Jacobs|Hughes,Hischier,Meier|Hamilton,Siegenthaler
+NYI|New York:Islanders|#2F7FD0|2.7|3.0|18|80|Sorokin,Rittich|Barzal,Horvat,Lee|Pulock,Romanov
+NYR|New York:Rangers|#1F56C4|3.0|3.0|21|80|Shesterkin,Quick|Panarin,Zibanejad,Lafreniere|Fox,Miller
+OTT|Ottawa:Senators|#C52032|3.1|3.0|23|79|Ullmark,Forsberg|Tkachuk,Stutzle,Batherson|Chabot,Sanderson
+PHI|Philadelphia:Flyers|#F74902|2.8|3.2|19|79|Fedotov,Ersson|Michkov,Konecny,Tippett|Sanheim,Seeler
+PIT|Pittsburgh:Penguins|#FCB514|2.8|3.3|20|77|Silovs,Blomqvist|Crosby,Malkin,Rakell|Karlsson,Letang
+SJS|San Jose:Sharks|#006D75|2.5|3.5|18|77|Askarov,Nedeljkovic|Celebrini,Smith,Eklund|Ferraro,Thrun
+SEA|Seattle:Kraken|#68A2B9|2.8|3.2|19|78|Grubauer,Daccord|Schwartz,Wright,Beniers|Larsson,Dunn
+STL|St. Louis:Blues|#2F5FC0|2.9|3.0|19|80|Binnington,Hofer|Thomas,Kyrou,Schenn|Parayko,Faulk
+TBL|Tampa Bay:Lightning|#1E4FB0|3.3|2.8|24|80|Vasilevskiy,Johansson|Kucherov,Point,Guentzel|Hedman,McDonagh
+TOR|Toronto:Maple Leafs|#1F4DAA|3.2|2.9|23|80|Stolarz,Woll|Matthews,Nylander,Tavares|Rielly,McCabe
+UTA|Utah:Mammoth|#6CACE4|3.0|3.0|21|80|Vejmelka,Ingram|Keller,Cooley,Guenther|Sergachev,Durzi
+VAN|Vancouver:Canucks|#00843D|2.9|3.0|21|80|Demko,Lankinen|Pettersson,Miller,Boeser|Hughes,Hronek
+VGK|Vegas:Golden Knights|#B4975A|3.3|2.8|22|82|Hill,Schmid|Eichel,Marner,Stone|Pietrangelo,Theodore
+WSH|Washington:Capitals|#C8102E|3.3|2.8|22|80|Thompson,Lindgren|Ovechkin,Strome,Wilson|Carlson,Fehervary
+WPG|Winnipeg:Jets|#3A5F9E|3.3|2.4|24|82|Hellebuyck,Comrie|Scheifele,Connor,Ehlers|Morrissey,Pionk`;
+const T=RAW.split('\n').map((l,i)=>{const p=l.split('|'),[c,k]=p[1].split(':');return{i,a:p[0],k,n:c+' '+k,c:p[2],o:+p[3],d:+p[4],pp:+p[5],pk:+p[6],g:p[7].split(','),f:p[8].split(','),df:p[9].split(','),tr:.8+(i*7%9)/20}});
+const R=s=>()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+const po=(l,r)=>{const L=Math.exp(-l);let k=0,p=1;do{k++;p*=r()}while(p>L);return k-1};
+/* Season day 0 = opening night. Change this date when you plug in a real feed. */
+const D0=Date.UTC(2026,9,7),now=new Date(),DI=Math.max(0,Math.floor((Date.UTC(now.getFullYear(),now.getMonth(),now.getDate())-D0)/864e5));
+const dstr=d=>new Date(D0+d*864e5).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',timeZone:'UTC'});
+const TM=['7:00','7:30','8:00','10:00'],SC={};
+const sched=d=>SC[d]||(SC[d]=(()=>{const r=R(d*7919+13),a=[...Array(32).keys()];for(let i=31;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}const n=3+Math.floor(r()*8),g=[];for(let i=0;i<n;i++)g.push({d,a:a[2*i],h:a[2*i+1],tx:Math.floor(r()*4)});return g})());
+const sim=(g,j)=>{const r=R(g.d*104729+j*31+5),A=T[g.a],H=T[g.h];let ag=po(A.o*H.d/3*.98,r),hg=po(H.o*A.d/3*1.03,r),ot=0;
+if(ag==hg){ot=1;r()<.5+(A.o-A.d-H.o+H.d)*.08?ag++:hg++}
+const pp=(x,y)=>{const o=po(2.3*y.tr,r);let s=0;for(let i=0;i<o;i++)if(r()<x.pp/100*(100-y.pk)/21)s++;return[o,s]};
+const[ao,ax]=pp(A,H),[ho,hx]=pp(H,A);
+return{d:g.d,a:g.a,h:g.h,ag,hg,ot,ao,ax:Math.min(ax,ag),ho,hx:Math.min(hx,hg),ap:2*ho+(r()<.4?5:0),hp:2*ao+(r()<.4?5:0),asf:Math.round(29+(A.o-3)*6+r()*8-4),hsf:Math.round(30+(H.o-3)*6+r()*8-4)}};
+const GM=[];for(let d=0;d<DI;d++)sched(d).forEach((g,j)=>GM.push(sim(g,j)));
+const ST=n=>{const s=T.map(()=>({gp:0,w:0,l:0,ol:0,gf:0,ga:0,ppg:0,ppo:0,pkg:0,pko:0,sf:0,sa:0,pim:0}));
+for(const g of GM){if(g.d>n)break;
+const u=(i,gf,ga,po_,pg,ko,kg,sf,sa,pim)=>{const x=s[i];x.gp++;x.gf+=gf;x.ga+=ga;x.ppo+=po_;x.ppg+=pg;x.pko+=ko;x.pkg+=kg;x.sf+=sf;x.sa+=sa;x.pim+=pim;gf>ga?x.w++:g.ot?x.ol++:x.l++};
+u(g.a,g.ag,g.hg,g.ao,g.ax,g.ho,g.hx,g.asf,g.hsf,g.ap);u(g.h,g.hg,g.ag,g.ho,g.hx,g.ao,g.ax,g.hsf,g.asf,g.hp)}
+return s};
+const K=8,MT=s=>T.map((t,i)=>{const a=s[i],g=a.gp,pts=2*a.w+a.ol,gf=(t.o*K+a.gf)/(K+g),ga=(t.d*K+a.ga)/(K+g),pp=(t.pp*3*K+100*a.ppg)/(3*K+a.ppo),pk=(t.pk*3*K+100*(a.pko-a.pkg))/(3*K+a.pko),sv=1-(t.d*K+a.ga)/(29*K+a.sa),sf=((29.5+(t.o-3)*6)*K+a.sf)/(K+g),pm=(6.6*t.tr*K+a.pim)/(K+g),pq=(.5+.17*(t.o-t.d)*1+0*pts),pw=(pq*K+pts/2)/(K+g);
+return{...a,pts,gf,ga,pp,pk,sv,sf,pm,gd:a.gf-a.ga,pi:50+40*(pw-.5)+10*(gf-ga)+.3*((pp-21)+(pk-80))}});
+const M=[MT(ST(DI-1)),MT(ST(DI-2)),MT(ST(DI-3))];
+const f1=v=>v.toFixed(1),f2=v=>v.toFixed(2),fp=v=>v.toFixed(1)+'%';
+const CA={
+all:{l:'Overall',k:'pi',up:1,f:f1,s:'Power Index',i:'PI',x:'Every team from best to worst, using the Power Index.'},
+off:{l:'Offence',k:'gf',up:1,f:f2,s:'Goals/game',i:'GF',x:'Who scores the most goals per game.'},
+def:{l:'Defence',k:'ga',up:0,f:f2,s:'Against/game',i:'GA',x:'Who lets in the fewest goals per game.'},
+pp:{l:'Power play',k:'pp',up:1,f:fp,s:'Power play',i:'PP',x:'Who scores most often with the man advantage.'},
+pk:{l:'Penalty kill',k:'pk',up:1,f:fp,s:'Penalty kill',i:'PK',x:'Who defends best when a player short.'},
+gk:{l:'Goalies',k:'sv',up:1,f:v=>v.toFixed(3).slice(1),s:'Save %',i:'SV',x:'Which team gets the best goaltending.'},
+dis:{l:'Discipline',k:'pm',up:0,f:f1,s:'PIM/game',i:'PIM',x:'Fewest penalty minutes per game, so the cleanest team ranks first.'}};
+const RKc={},RK=(m,c)=>RKc[m+c]||(RKc[m+c]=(()=>{const{k,up}=CA[c],X=M[m],o=T.map(t=>t.i).sort((x,y)=>(up?X[y][k]-X[x][k]:X[x][k]-X[y][k])||X[y].pi-X[x].pi),r=[];o.forEach((t,p)=>r[t]=p);return r})());
+const mv=(i,c,l)=>RK(l,c)[i]-RK(0,c)[i];
+const IT=['Upper body','Lower body','Illness','Knee','Shoulder','Concussion','Hand','Ankle'];
+const INJL=(()=>{const w=Math.floor(DI/5),L=[];T.forEach(t=>[t.g[0],...t.f,...t.df].forEach((p,j)=>{const r=R(w*911+t.i*53+j*7+3);if(r()<.09){const s=r(),y=IT[Math.floor(r()*IT.length)],k=s<.5?'DTD':s<.85?'OUT':'IR';L.push({t:t.i,p,r:j?j<4?'F':'D':'G',y,s:k,x:k=='DTD'?'Day-to-day':k=='OUT'?`About ${1+Math.floor(r()*3)} weeks`:`${4+Math.floor(r()*5)}+ weeks`})}}));return L})();
+const IN={
+PI:['Power Index',`Our 0 to 100 score for how strong a team is right now. It blends points percentage, goal difference and special teams. Early in the season it leans on preseason expectations, then real results take over. 50 is average; 60 or more is a contender.`],
+PTS:['Points',`A win earns 2 points, even in overtime or a shootout. An overtime or shootout loss earns 1 point. A loss in regulation earns 0. The standings are ranked by points.`],
+REC:['Record (W-L-OT)',`Wins, regulation losses, then overtime or shootout losses. An OT loss still earns a point, which is why it is listed separately.`],
+GP:['Games played',`How many games the team has played so far. A full season is 82 games.`],
+GF:['Goals for per game',`Average goals scored each game. Higher means a stronger offence. The league average is about 3.0 and 3.4 or more is elite.`],
+GA:['Goals against per game',`Average goals allowed each game. Lower is better. About 2.7 is a strong defence; above 3.2 is a weak one.`],
+GD:['Goal differential',`Goals scored minus goals allowed. It is one of the best simple signs of how good a team really is, because luck evens out over time.`],
+PP:['Power play %',`When the other team takes a penalty, your team plays with an extra skater (usually 5 on 4) for 2 minutes or until you score. Power play % is how often those chances end in a goal. 20% is average and 25% or more is elite.`],
+PK:['Penalty kill %',`When your team takes a penalty, it plays a skater short. Penalty kill % is how often it stops the other team from scoring in that time. About 80% is average and 83% or more is elite.`],
+SV:['Save percentage',`The share of shots on goal that the goalie stops. .905 is about average and .915 or better is excellent. Here it covers whoever played in net for the team.`],
+SF:['Shots per game',`Shots on goal the team takes each game. More shots usually means more time in the attacking zone and more chances to score.`],
+PIM:['Penalty minutes per game',`Minutes a team spends in the penalty box each game. Fewer is better: a disciplined team gives opponents fewer power plays.`],
+WIN:['Win chance',`Our estimate of each team's chance to win. It compares both Power Index scores, adds a small boost for playing at home, and lowers a team's chance if its starting goalie is a backup or key players are hurt. Even the best team rarely tops 75% in one game, because hockey has a lot of randomness.`],
+LU:['Predicted lineup',`Our best guess at who plays. Goalies usually rest on the second night of back-to-back games. Injured players are replaced ("Call-up" means a minor-league player fills in). A name with * is day-to-day and expected to play. Teams confirm real lineups on game day.`],
+INJ:['Injury status',`DTD (day-to-day): might play, decided close to game time. OUT: misses games for a set stretch. IR (injured reserve): out at least a week and often much longer.`]};
+const info=k=>`<button class=i data-i=${k} aria-label="What does ${k} mean?">i</button>`;
+const tc=c=>{const n=parseInt(c.slice(1),16);return .299*(n>>16)+.587*(n>>8&255)+.114*(n&255)>150?'#111':'#fff'};
+const lg=t=>`<span class=lg style="background:${t.c};color:${tc(t.c)}">${t.a}</span>`;
+const rec=a=>`${a.w}-${a.l}-${a.ol}`;
+const ar=v=>v>0?`<b class=u>&#9650;${v}</b>`:v<0?`<b class=d>&#9660;${-v}</b>`:'<b class=z>&ndash;</b>';
+let FAV=null,tab='home',cat='all',gday=0,injF='all';
+try{const a=localStorage.getItem('nhlfav'),t=T.find(x=>x.a==a);if(t)FAV=t.i}catch(_){}
+const isF=g=>FAV!=null&&(g.a==FAV||g.h==FAV);
+const nextG=f=>{for(let k=0;k<10;k++){const g=sched(DI+k).find(x=>x.a==f||x.h==f);if(g)return{g,k}}};
+function LU(i,d,op){const t=T[i],ij=INJL.filter(x=>x.t==i),out=n=>ij.some(x=>x.p==n&&x.s!='DTD'),dt=n=>ij.some(x=>x.p==n&&x.s=='DTD'),
+b2b=d>0&&sched(d-1).some(g=>g.a==i||g.h==i),o=out(t.g[0]),bk=o||b2b,g=bk?t.g[1]:t.g[0],sw=n=>out(n)?'Call-up':dt(n)?n+'*':n,
+f=t.f.map(sw),df=t.df.map(sw),lost=[...t.f,...t.df].filter(out).length,
+ls=[...GM].reverse().find(x=>x.a==i||x.h==i),won=ls&&(ls.a==i?ls.ag>ls.hg:ls.hg>ls.ag),
+hot=RK(0,'pp')[op]<8,off=RK(0,'off')[op]<8,ok=T[op].k;
+return{g,f,df,adj:(bk?-4:0)-2.5*lost,tag:[bk?'backup goalie starting':'',lost?`${lost} key skater${lost>1?'s':''} out`:''].filter(Boolean).join(', '),
+why:[bk?(o?`${t.g[0]} is injured, so ${t.g[1]} starts.`:`Second night of back-to-back games, so ${t.g[1]} starts and ${t.g[0]} rests.`):`${t.g[0]} starts: healthy and rested, with no game yesterday.`,
+lost?`${lost} key skater${lost>1?'s are':' is'} out, so call-ups fill the open spots.`:ij.some(x=>x.s=='DTD')?`A * means day-to-day: expected to play unless he is a late scratch.`:`Top players are healthy, so the usual lines play.`,
+ls?(won?`Coach keeps the same lines after the last win.`:`Last game was a loss. Small tweaks are possible, but the top line normally stays together.`):`No games yet, so lines follow the depth chart.`,
+hot?`${ok} have a top-8 power play, so the top defence pair gets extra penalty-kill time.`:off?`${ok} have a top-8 offence, so expect the best defence pair against their top line.`:`${ok} are a lower scoring threat, so the coach can lean on offence.`]}}
+function pred(g){const A=T[g.a],H=T[g.h],la=LU(g.a,g.d,g.h),lh=LU(g.h,g.d,g.a),a=M[0][g.a].pi,h=M[0][g.h].pi,p=1/(1+Math.exp(-(h-a+2.5+lh.adj-la.adj)/22));
+const why=[`${(h>=a?H:A).k} rate higher: Power Index ${f1(Math.max(a,h))} vs ${f1(Math.min(a,h))}.`,`Home ice adds about 2.5 index points for ${H.k}.`];
+if(la.adj)why.push(`${A.k}: ${la.tag}.`);if(lh.adj)why.push(`${H.k}: ${lh.tag}.`);
+return{p,la,lh,why}}
+function news(f){const t=T[f],m=M[0][f],o=[],ls=[...GM].reverse().find(g=>g.a==f||g.h==f);
+if(ls){const h=ls.h==f,a=h?ls.hg:ls.ag,b=h?ls.ag:ls.hg,p=T[h?ls.a:ls.h],s=h?ls.hsf:ls.asf,q=h?ls.asf:ls.hsf,x=h?ls.hx:ls.ax,n=h?ls.ho:ls.ao;
+o.push(['Result',`${t.k} ${a>b?'beat':'lose to'} ${p.k} ${a}-${b}${ls.ot?' in overtime':''}`,`${dstr(ls.d)}. Shots ${s}-${q}, power play ${x} for ${n}.`])}
+else o.push(['Season','Waiting on the first game','No results yet, so rankings use preseason ratings.']);
+const m2=mv(f,'all',2),r=RK(0,'all')[f]+1;
+o.push(['Rankings',m2>0?`${t.k} climb ${m2} spot${m2>1?'s':''} to #${r}`:m2<0?`${t.k} slip ${-m2} spot${m2<-1?'s':''} to #${r}`:`${t.k} hold at #${r} overall`,`Power Index ${f1(m.pi)}, compared with the standings through ${dstr(DI-3)}.`]);
+const ng=nextG(f);if(ng){const g=ng.g,aw=g.a==f,P=pred(g);o.push(['Preview',`Next: ${aw?'at':'vs'} ${T[aw?g.h:g.a].k} ${ng.k==0?'today':ng.k==1?'tomorrow':dstr(DI+ng.k)}`,`${Math.round((aw?1-P.p:P.p)*100)}% win chance. Projected starter in net: ${(aw?P.la:P.lh).g}.`])}
+const rp=RK(0,'pp')[f]+1,rk=RK(0,'pk')[f]+1;o.push(['Special teams',rp<=rk?`Power play ranks #${rp} in the league`:`Penalty kill ranks #${rk} in the league`,rp<=rk?`Scoring on ${fp(m.pp)} of power plays.`:`Stopping ${fp(m.pk)} of opposing power plays.`]);
+const ij=INJL.filter(x=>x.t==f);if(ij.length)o.push(['Injuries',ij.map(x=>x.p).join(', ')+(ij.length>1?' are':' is')+' on the injury report',ij.map(x=>`${x.p}: ${x.y}, ${x.s=='DTD'?'day-to-day':x.x.toLowerCase()}`).join('. ')+'.']);
+return o}
+const tiles=i=>{const m=M[0][i];return[['PTS','Points',m.pts],['REC','W-L-OT',rec(m)],['GP','Games',m.gp],['GF','Goals/game',f2(m.gf)],['GA','Against/game',f2(m.ga)],['GD','Goal diff',(m.gd>0?'+':'')+m.gd],['PP','Power play',fp(m.pp)],['PK','Penalty kill',fp(m.pk)],['SV','Save %',m.sv.toFixed(3).slice(1)],['SF','Shots/game',f1(m.sf)],['PIM','PIM/game',f1(m.pm)],['PI','Power Index',f1(m.pi)]].map(([k,l,v])=>`<div class=t><b>${v}</b><small>${l}${info(k)}</small></div>`).join('')};
+const row=(i,c)=>{const t=T[i],m=M[0][i],C=CA[c];return`<details class="rw${i===FAV?' fv':''}"><summary><span class=rk>${RK(0,c)[i]+1}</span>${lg(t)}<span class=nm><b>${t.n}</b><small>${rec(m)}, ${m.pts} pts, 2-day ${ar(mv(i,c,2))}</small></span><span class=ar>${ar(mv(i,c,1))}</span><span class=v>${C.f(m[C.k])}</span></summary><div class="g3 ex">${tiles(i)}</div></details>`};
+function snap(){const o=T.map(t=>t.i).sort((a,b)=>RK(0,'all')[a]-RK(0,'all')[b]).slice(0,5),d2=T.map(t=>mv(t.i,'all',2)),mx=Math.max(...d2),mn=Math.min(...d2),u=d2.indexOf(mx),dn=d2.indexOf(mn);
+return`<div class=c><h2>League top 5</h2>${o.map(i=>row(i,'all')).join('')}<p class=sm style="margin-top:8px">${mx>0?`Biggest 2-day riser: ${T[u].n} ${ar(mx)}.${mn<0?` Biggest faller: ${T[dn].n} ${ar(mn)}.`:''}`:'No 2-day movement yet. Moves appear as games are played.'}</p></div><p class=sm>About this data: results, injuries and headlines in this demo are generated by a model from team ratings and the calendar. Rosters are examples and may be out of date. It is built so a real NHL feed can replace the generator.</p>`}
+function home(){
+if(FAV==null)return`<div class=c style="text-align:center"><div class=big>Pick your favourite team</div><p class=sm style="margin-top:6px">Your team goes front and center here with its rankings, next game, injuries and news.</p><button class=btn data-pick=1>Choose team</button></div>`+snap();
+const t=T[FAV],m=M[0][FAV],r=RK(0,'all')[FAV]+1,ng=nextG(FAV);
+const tl=[['off','GF'],['def','GA'],['pp','PP'],['pk','PK']].map(([c,k])=>`<div class=t><b>#${RK(0,c)[FAV]+1}</b><small>${CA[c].l}${info(k)}</small><small>${CA[c].f(m[CA[c].k])}</small></div>`).join('');
+let nx='';
+if(ng){const g=ng.g,aw=g.a==FAV,o=T[aw?g.h:g.a],P=pred(g),w=Math.round((aw?1-P.p:P.p)*100),l=aw?P.la:P.lh;
+nx=`<div class=c><h2>Next game</h2><div class=nr>${lg(o)}<div><b>${aw?'at':'vs'} ${o.n}</b><p class=sm>${ng.k==0?'Today':ng.k==1?'Tomorrow':dstr(DI+ng.k)}, ${TM[g.tx]} PM ET. In net: ${l.g}</p></div></div><div class=pr><b>${w}%</b><div class=pb><i style="width:${w}%;background:${t.c}"></i><i style="width:${100-w}%;background:${o.c}"></i></div><b>${100-w}%</b></div><p class=sm>${t.k} win chance ${info('WIN')}</p>${ng.k<3?`<button class=btn2 data-go=${ng.k}>See predicted lineups</button>`:''}</div>`}
+return`<div class="c hero" style="border-left-color:${t.c}"><div class=hh><span class=fo style="border-color:${t.c}">${lg(t)}</span><div class=hn><div class=big>${t.n}</div><p class=sm>${rec(m)}, ${m.pts} pts, ${m.gp} games</p></div><div class=rb>#${r}<small>Overall</small></div></div><p class=sm>Overall move: ${ar(mv(FAV,'all',1))} since yesterday, ${ar(mv(FAV,'all',2))} over 2 days ${info('PI')}</p><div class=g2>${tl}</div></div>`+nx+`<div class=c><h2>${t.k} news</h2>${news(FAV).map(n=>`<article class=nw><span class=tg>${n[0]}</span><b>${n[1]}</b><p>${n[2]}</p></article>`).join('')}<p class=sm style="margin:8px 0 0">Headlines are written from this tracker's data. For official news visit <a href="https://www.nhl.com/news" target=_blank rel=noopener>NHL.com</a>.</p></div>`+snap()}
+function ranks(){const C=CA[cat],rk=RK(0,cat),o=T.map(t=>t.i).sort((a,b)=>rk[a]-rk[b]);
+return`<div class=ch>${Object.keys(CA).map(k=>`<button class="${k==cat?'on':''}" data-cat=${k}>${CA[k].l}</button>`).join('')}</div><p class=sm>${C.x} Tap a team to see all its stats.</p><div class=c><div class=hd><span>Rank, team, change</span><span>${C.s}${info(C.i)}</span></div>${o.map(i=>row(i,cat)).join('')}</div><p class=sm>The arrow compares with yesterday. The 2-day trend under each name compares with the standings through ${dstr(DI-3)}.</p>`}
+const lu=(t,l)=>`<div class=lu><div class=lh>${lg(t)}<b>${t.n}</b></div><div><span>G</span>${l.g}</div><div><span>F</span>${l.f.join(', ')}</div><div><span>D</span>${l.df.join(', ')}</div><ul class=why>${l.why.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
+const gc=g=>{const A=T[g.a],H=T[g.h],P=pred(g),ph=Math.round(P.p*100),pa=100-ph;
+return`<div class="c gc${isF(g)?' fvc':''}"><div class=gt><span>${TM[g.tx]} PM ET</span><span>${isF(g)?'&#9733; Your team':''}</span></div><div class=gm><div class=tm>${lg(A)}<b>${A.k}</b><small>#${RK(0,'all')[A.i]+1}, ${rec(M[0][A.i])}</small></div><span class=at>at</span><div class=tm>${lg(H)}<b>${H.k}</b><small>#${RK(0,'all')[H.i]+1}, ${rec(M[0][H.i])}</small></div></div><div class=pr><b>${pa}%</b><div class=pb><i style="width:${pa}%;background:${A.c}"></i><i style="width:${ph}%;background:${H.c}"></i></div><b>${ph}%</b></div><details><summary>Why this pick, and predicted lineups</summary><ul class=why>${P.why.map(x=>`<li>${x}</li>`).join('')}</ul>${lu(A,P.la)}${lu(H,P.lh)}</details></div>`};
+function games(){const d=DI+gday,L=sched(d).slice().sort((x,y)=>isF(y)-isF(x)||x.tx-y.tx);
+return`<div class=ch>${[0,1,2].map(k=>`<button class="${k==gday?'on':''}" data-day=${k}>${k==0?'Today':k==1?'Tomorrow':dstr(DI+k).split(',')[0]}<small>${dstr(DI+k).split(', ')[1]}</small></button>`).join('')}</div><p class=sm>Win chance ${info('WIN')} and predicted lineups ${info('LU')} update as results and injuries change. Your team's games come first.</p>${L.map(gc).join('')}`}
+function inj(){const o={IR:0,OUT:1,DTD:2},ef={G:'Backup goalie in net',F:'Forward lines reshuffled',D:'Defence pairs reshuffled'},L=INJL.filter(x=>injF=='all'||x.t==FAV).sort((a,b)=>o[a.s]-o[b.s]||T[a.t].a.localeCompare(T[b.t].a));
+return`<div class=ch><button class="${injF=='all'?'on':''}" data-inj=all>All teams</button><button class="${injF=='fav'?'on':''}" data-inj=fav>My team</button></div><p class=sm>Injury status ${info('INJ')}. The lineup predictions on the Games tab already account for these.</p><div class=c>${injF=='fav'&&FAV==null?'<p>Pick a favourite team on the Home tab first.</p>':L.map(x=>`<div class=ir>${lg(T[x.t])}<div class=nm><b>${x.p}</b><small>${x.r=='G'?'Goalie':x.r=='F'?'Forward':'Defence'}, ${T[x.t].n}, ${x.y}</small><small>${x.s=='DTD'?'Game-time decision':ef[x.r]}</small></div><div class=rt><span class="st ${x.s}">${x.s}</span><small>${x.x}</small></div></div>`).join('')||'<p>No injuries to report.</p>'}</div>`}
+function sheet(h,b){$('pn').innerHTML=h+(b===0?'':'<button class=btn data-x=1>Got it</button>');$('sh').hidden=false}
+const close=()=>{$('sh').hidden=true};
+function picker(){sheet(`<h3>Choose your favourite team</h3><div class=pk>${[...T].sort((a,b)=>a.n.localeCompare(b.n)).map(t=>`<button class="${t.i===FAV?'sel':''}" data-fav=${t.i}>${lg(t)}${t.k}</button>`).join('')}</div>`,0)}
+function draw(top){$('v').innerHTML=({home,ranks,games,inj})[tab]();document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.tab==tab));$('sb').textContent=`Results through ${dstr(DI-1)}, sample data`;if(top)scrollTo(0,0)}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-i],[data-tab],[data-cat],[data-day],[data-pick],[data-fav],[data-x],[data-inj],[data-go]');if(!b)return;const d=b.dataset;
+if(d.i){const x=IN[d.i];sheet(`<h3>${x[0]}</h3><p>${x[1]}</p>`)}
+else if(d.tab){tab=d.tab;draw(1)}
+else if(d.cat){cat=d.cat;draw()}
+else if(d.day!=null){gday=+d.day;draw()}
+else if(d.pick){picker()}
+else if(d.fav!=null){FAV=+d.fav;try{localStorage.setItem('nhlfav',T[FAV].a)}catch(_){}close();tab='home';draw(1)}
+else if(d.inj){injF=d.inj;draw()}
+else if(d.go!=null){tab='games';gday=+d.go;draw(1)}
+else if(d.x!=null)close()});
+document.addEventListener('keydown',e=>{if(e.key=='Escape')close()});
+draw();
+</script></body></html>
