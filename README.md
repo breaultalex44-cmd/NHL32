@@ -1,4 +1,5 @@
 # NHL 32
+Prototype, doesn't function (yet)
 
 A web-based NHL-themed interactive application hosted on GitHub Pages.
 
